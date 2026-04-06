@@ -1,0 +1,341 @@
+/**
+ * MoG-India - Main Application Styles
+ */
+
+/* ============================================================================
+   Layout
+   ============================================================================ */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.chart-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-secondary);
+}
+
+/* ============================================================================
+   Chart Toolbar
+   ============================================================================ */
+
+.chart-toolbar {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  z-index: 10;
+  align-items: flex-end;
+}
+
+.toolbar-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+}
+
+.toolbar-btn:hover {
+  background-color: var(--bg-tertiary);
+  transform: scale(1.05);
+}
+
+.toolbar-btn:active {
+  transform: scale(0.95);
+}
+
+.toolbar-btn-active {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+.toolbar-separator {
+  width: 28px;
+  height: 1px;
+  background: var(--border-color);
+  margin: 2px auto;
+}
+
+/* ── Toolbar popup panels ── */
+.toolbar-popup {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  box-shadow: var(--shadow-md);
+  min-width: 160px;
+  animation: fadeIn 0.12s ease-out;
+}
+
+.toolbar-popup-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--spacing-xs);
+}
+
+/* Legend items */
+.legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.legend-separator {
+  height: 1px;
+  background: var(--border-color);
+  margin: 6px 0;
+}
+
+/* Territory filter */
+.territory-options {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.territory-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 5px 8px;
+  border: none;
+  background: none;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.territory-option:hover {
+  background: var(--bg-tertiary);
+}
+
+.territory-active {
+  background: var(--accent-color);
+  color: white;
+  font-weight: 600;
+}
+
+.territory-active:hover {
+  background: var(--accent-hover);
+}
+
+/* ============================================================================
+   Details Pane
+   ============================================================================ */
+
+.details-pane {
+  width: 400px;
+  max-width: 100vw;
+  background-color: var(--bg-primary);
+  border-left: 1px solid var(--border-color);
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .details-pane {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    z-index: 100;
+    border-left: none;
+  }
+}
+
+/* ============================================================================
+   Mobile Selection Chip
+   ============================================================================ */
+
+.mobile-selection-chip {
+  display: none;
+  position: fixed;
+  bottom: var(--spacing-md);
+  left: var(--spacing-md);
+  right: var(--spacing-md);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm) var(--spacing-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 50;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chip-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.chip-name {
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chip-type {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.chip-btn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--accent-color);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.chip-btn:hover {
+  background-color: var(--accent-hover);
+}
+
+@media (max-width: 768px) {
+  .mobile-selection-chip {
+    display: flex;
+  }
+}
+
+/* ============================================================================
+   Scrollbar for dark mode
+   ============================================================================ */
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+}
+
+/* ============================================================================
+   Utility Classes
+   ============================================================================ */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================================
+   Animations
+   ============================================================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.details-pane {
+  animation: slideInRight 0.2s ease-out;
+}
+
+/* ============================================================================
+   Overlay Pane (Categories, etc.)
+   ============================================================================ */
+
+.overlay-pane {
+  position: fixed;
+  top: 60px;
+  right: 0;
+  bottom: 0;
+  width: 400px;
+  max-width: 100vw;
+  background-color: var(--bg-primary);
+  border-left: 1px solid var(--border-color);
+  z-index: 90;
+  box-shadow: var(--shadow-lg);
+  animation: slideInRight 0.2s ease-out;
+}
+
+@media (max-width: 768px) {
+  .overlay-pane {
+    top: 0;
+    width: 100vw;
+    z-index: 100;
+    border-left: none;
+  }
+}
+
+.mobile-selection-chip {
+  animation: slideInUp 0.2s ease-out;
+}

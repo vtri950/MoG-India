@@ -1,0 +1,489 @@
+/**
+ * ElementDetails Component Styles
+ */
+
+.element-details {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Header */
+.details-header {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  font-size: 24px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.close-btn:hover {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.element-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--spacing-xs);
+}
+
+.element-name {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: var(--spacing-xs);
+  padding-right: 40px;
+}
+
+.element-name-hindi {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.element-abbr {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Tabs */
+.details-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 var(--spacing-md);
+}
+
+.tab-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all var(--transition-fast);
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
+}
+
+/* Content */
+.details-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-md);
+}
+
+/* Info section */
+.info-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.info-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--spacing-xs);
+}
+
+.description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.holder-name {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.holder-date {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.legal-basis {
+  font-size: 14px;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+/* Tags */
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.tag-pill {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid;
+}
+
+/* Relations */
+.relations-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.relation-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) 0;
+  font-size: 14px;
+  color: var(--text-primary);
+  text-align: left;
+  transition: color var(--transition-fast);
+}
+
+.relation-link:hover {
+  color: var(--accent-color);
+}
+
+.relation-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Links */
+.links-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.external-link {
+  font-size: 14px;
+  color: var(--link-color);
+}
+
+/* No-data message */
+.no-data {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  padding: var(--spacing-lg) 0;
+}
+
+/* ==================== Powers Tab ==================== */
+
+.powers-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.data-date,
+.data-source {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+.power-card {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  border-left: 3px solid var(--accent-color, #ff6b00);
+}
+
+.power-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.power-type-badge {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.power-type-badge.power {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.power-type-badge.duty {
+  background: #fce4ec;
+  color: #c62828;
+}
+
+.power-type-badge.function {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+[data-theme="dark"] .power-type-badge.power {
+  background: #1e3a5f;
+  color: #90caf9;
+}
+
+[data-theme="dark"] .power-type-badge.duty {
+  background: #4a1c1c;
+  color: #ef9a9a;
+}
+
+[data-theme="dark"] .power-type-badge.function {
+  background: #1b3d1b;
+  color: #a5d6a7;
+}
+
+.power-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.power-description {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: var(--spacing-xs) 0;
+  line-height: 1.5;
+}
+
+.power-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: var(--spacing-xs);
+}
+
+.source-chip {
+  font-size: 11px;
+  background: var(--bg-tertiary, #f0f0f0);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.source-chip a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.source-chip a:hover {
+  text-decoration: underline;
+}
+
+.power-notes {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: var(--spacing-xs);
+}
+
+/* ==================== Budget Tab ==================== */
+
+.budget-header-info {
+  margin-bottom: var(--spacing-md);
+}
+
+.fiscal-year {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.budget-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.budget-stat,
+.staff-stat {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stat-value.vacancy {
+  color: #e65100;
+}
+
+.breakdown-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: var(--spacing-md) 0 var(--spacing-sm);
+}
+
+.breakdown-item {
+  margin-bottom: var(--spacing-sm);
+}
+
+.breakdown-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.breakdown-desc {
+  color: var(--text-secondary);
+  flex: 1;
+  margin-right: var(--spacing-sm);
+}
+
+.breakdown-amount {
+  color: var(--text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.breakdown-bar-track {
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.breakdown-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.breakdown-bar-fill.revenue {
+  background: #42a5f5;
+}
+
+.breakdown-bar-fill.capital {
+  background: #66bb6a;
+}
+
+/* ==================== Staff Tab ==================== */
+
+.staff-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.staff-basic {
+  text-align: center;
+  padding: var(--spacing-lg) 0;
+}
+
+.staff-total {
+  font-size: 16px;
+}
+
+.grade-item {
+  display: grid;
+  grid-template-columns: 120px 1fr 60px;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: 6px;
+}
+
+.grade-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+  text-align: right;
+}
+
+.grade-bar-track {
+  height: 10px;
+  background: var(--bg-secondary);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.grade-bar-fill {
+  height: 100%;
+  background: #ff6b00;
+  border-radius: 5px;
+  transition: width 0.4s ease;
+}
+
+.grade-count {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.sub-org-item {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-xs) 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+}
+
+.sub-org-name {
+  color: var(--text-secondary);
+}
+
+.sub-org-count {
+  font-weight: 500;
+  color: var(--text-primary);
+}
