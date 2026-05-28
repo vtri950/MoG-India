@@ -78,13 +78,13 @@ const NODE_SIZE = 22;
 
 function FullView({
   selectedElementId,
-  highlightedIds,
+  highlightedIds: _highlightedIds,
   onSelectElement,
   onElementClick,
   searchQuery,
-  categoryFilters,
+  categoryFilters: _categoryFilters,
   jurisdictionFilter,
-  tagFilters,
+  tagFilters: _tagFilters,
 }: FullViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<Core | null>(null);
