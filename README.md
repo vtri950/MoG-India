@@ -8,7 +8,7 @@
 
 Interactive visualization of the Indian Government — ministries, departments, constitutional bodies, regulators, tribunals, and PSUs, and how they oversee one another.
 
-> **Live demo:** _not yet deployed — [deploy to GitHub Pages](#deploy) or run locally with `npm run dev`_
+> **Live demo:** [vtri950.github.io/MoG-India](https://vtri950.github.io/MoG-India/)
 
 ![MoG-India Screenshot](docs/screenshot.png)
 
