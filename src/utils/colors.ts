@@ -209,6 +209,32 @@ export function getLightColor(hexColor: string, opacity: number = 0.1): string {
 }
 
 /**
+ * Mix a hex colour toward white (amount 0..1) — used for the glossy highlight
+ * stop of a node's "3-D sphere" radial gradient.
+ */
+export function lighten(hexColor: string, amount: number = 0.5): string {
+  const hex = hexColor.replace('#', '');
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  const mix = (c: number) => Math.round(c + (255 - c) * amount);
+  return `#${[mix(r), mix(g), mix(b)].map(c => c.toString(16).padStart(2, '0')).join('')}`;
+}
+
+/**
+ * Mix a hex colour toward black (amount 0..1) — used for the shaded rim stop
+ * of a node's "3-D sphere" radial gradient.
+ */
+export function darken(hexColor: string, amount: number = 0.35): string {
+  const hex = hexColor.replace('#', '');
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  const mix = (c: number) => Math.round(c * (1 - amount));
+  return `#${[mix(r), mix(g), mix(b)].map(c => c.toString(16).padStart(2, '0')).join('')}`;
+}
+
+/**
  * Get contrasting text color (black or white) based on background
  */
 export function getContrastColor(hexColor: string): string {

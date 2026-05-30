@@ -41,14 +41,16 @@ Two views render this network:
 
 ## Features
 
-- Click any node to open its **details pane** (Info, Powers, Budget, Staff tabs)
+- Click any node to open its **details pane** (Info and Powers tabs)
+- **Info tab** — description, legal basis, headquarters, established year, current officeholder, and reports-to / oversees / oversight-and-advisory relationships
+- **Powers tab** — constitutional powers, statutory duties, and functions with cited sources (Constitution articles & Acts), for **every** element
 - **Search** by name, abbreviation, or tag
 - **Filter** by category, jurisdiction (Union / State / UT), or tag
 - **Random element** button (⚄) for serendipitous browsing
 - **Dark / light** theme
 - **Legend** and **territory filter** popovers
 
-> Powers, Budget, and Staff tabs render scaffolds today — the underlying data files (`powers.ts`, `budgets.ts`, `staffing.ts`) are works in progress.
+> Powers data covers all 370 elements: hand-written for officials, ministries, and major bodies (from specific Acts & constitutional articles), and templated from the Constitution and the Allocation of Business Rules for states, ministers, departments, and the long tail of bodies.
 
 ## Interacting with the graph
 
@@ -218,7 +220,7 @@ src/
 ├── components/
 │   ├── FullView.tsx          # Cytoscape concentric layout
 │   ├── OrgChart.tsx          # Focus / radial layout
-│   ├── ElementDetails.tsx    # Info / Powers / Budget / Staff tabs
+│   ├── ElementDetails.tsx    # Info / Powers tabs
 │   ├── SearchPane.tsx        # Full-text + tag search
 │   ├── CategoriesPane.tsx    # Browse by category / subtype
 │   ├── CategoryInfo.tsx      # Drill-down for a single category
@@ -246,7 +248,7 @@ src/
 | **Cabinet Ministers** | 30 | All 52+ portfolio holders | Active cabinet only |
 | **Cabinet Committees** | 3 (CCS, CCEA, CCPA) | All 8+ | Core committees done |
 | **Union Ministries** | 49 | 52 | Near-complete |
-| **Departments** | 9 | 90+ | Major ones only |
+| **Departments** | 44 | 90+ | Multi-department ministries mapped (Defence, Home, Finance, Health, Agriculture, S&T, Personnel, etc.) |
 | **Constitutional Bodies** | 7 | ~12 | Supreme Court, EC, CAG, UPSC, Finance Commission, AG, CVC |
 | **Statutory Bodies** | 8 | 50+ | Selective coverage |
 | **Regulatory Authorities** | 4 | ~20 | RBI, SEBI, IRDAI, TRAI |
@@ -254,13 +256,15 @@ src/
 | **Autonomous Bodies** | 5 | 200+ | Selective |
 | **Corporations** | 4 | 30+ | Selective |
 | **Tribunals** | 3 | ~20 | NGT, NCLT, CAT |
-| **State Governments** | 2 sample states | 28 states + 8 UTs | Skeletal structure |
+| **State Governments** | 28 states + 3 UTs (Governor, CM, Legislature, HC, PSC each) | All 28 states + 8 UTs | Generated structure for every state & legislature UT |
 | **Local Government** | ~42 elements | Panchayat Raj + Urban bodies | Framework in place |
-| **Powers data** | 0 | All elements | `powers.ts` — WIP |
-| **Budget data** | 0 | All ministries | `budgets.ts` — WIP; targets Union Budget 2024-25 |
-| **Staff data** | 0 | All ministries | `staffing.ts` — WIP; targets DoPT 2023-24 Report |
+| **Powers data** | All 370 elements (1,105 powers) | — | `powers.ts` — hand-written for officials, ministries & major bodies; templated from the Constitution / Allocation of Business Rules for states, ministers, departments & the long tail |
+| **Current officeholders** | 108 / 370 | All officials & body heads | CJI, CEC, CAG, RBI/SEBI/IRDAI/TRAI/UPSC heads, all Governors & CMs (officeholders change frequently — structure is the focus) |
+| **Hindi names** | 370 / 370 | — | Complete |
 
-**Total elements today: ~225** (170 Union + 13 State + 42 Local)
+**Total elements today: ~370** (Union + 31 states/UTs × 5 institutions + local government)
+
+> Budget (`budgets.ts`) and staffing (`staffing.ts`) data files remain in the repo as scaffolds but are no longer surfaced in the UI — the details pane focuses on structure (Info) and authority (Powers).
 
 ## Stack
 

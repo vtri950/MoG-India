@@ -178,6 +178,16 @@
   color: var(--accent-color);
 }
 
+/* Secondary (oversight/advisory) links — mirror the dashed edges in the graph */
+.relation-link-secondary {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.relation-link-secondary .relation-dot {
+  opacity: 0.55;
+}
+
 .relation-dot {
   width: 8px;
   height: 8px;
