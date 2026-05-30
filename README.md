@@ -10,13 +10,12 @@ Interactive visualization of the Indian Government — ministries, departments, 
 
 > **Live demo:** [vtri950.github.io/MoG-India](https://vtri950.github.io/MoG-India/)
 
-![MoG-India Screenshot](docs/screenshot.png)
-
 ## What it shows
 
 The Indian state is modelled as a network of **elements** (officials, ministries, bodies, groups) connected by **oversight relationships**. Distance from the President roughly corresponds to constitutional remoteness.
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#eef2ff','primaryTextColor':'#1a1a1a','primaryBorderColor':'#6366f1','lineColor':'#64748b','textColor':'#1a1a1a','fontSize':'14px'}}}%%
 graph TD
   P[Ring 0 — President]
   VP[Ring 1 — Vice President]
@@ -102,6 +101,7 @@ In the graph, the **direction** of an edge always points from child to parent (i
 Every node is a `GovElement`. Elements carry classification (category + subtype), tags, jurisdictions, and one or more parent links.
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#eef2ff','primaryTextColor':'#1a1a1a','primaryBorderColor':'#6366f1','lineColor':'#64748b','textColor':'#1a1a1a','fontSize':'14px'}}}%%
 classDiagram
   class GovElement {
     +id string
@@ -175,6 +175,7 @@ Union (Central)
 Pure client-side React app. State lives in `App.tsx`; data is bundled at build time from static TS files in `src/data/`.
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#eef2ff','primaryTextColor':'#1a1a1a','primaryBorderColor':'#6366f1','lineColor':'#64748b','textColor':'#1a1a1a','fontSize':'14px'}}}%%
 flowchart LR
   subgraph Data[src/data]
     E[elements.ts]
@@ -257,7 +258,7 @@ src/
 | **Corporations** | 4 | 30+ | Selective |
 | **Tribunals** | 3 | ~20 | NGT, NCLT, CAT |
 | **State Governments** | 28 states + 3 UTs (Governor, CM, Legislature, HC, PSC each) | All 28 states + 8 UTs | Generated structure for every state & legislature UT |
-| **Local Government** | ~42 elements | Panchayat Raj + Urban bodies | Framework in place |
+| **Local Government** | Rural (Zila Parishad → Panchayat Samiti → Gram Panchayat) + Urban (Municipal Corporation → Municipality → Nagar Panchayat) | Named individual bodies | Three-tier rural & urban hierarchies, rooted under State Governments (a State subject); shown as triangles in the graph |
 | **Powers data** | All 370 elements (1,105 powers) | — | `powers.ts` — hand-written for officials, ministries & major bodies; templated from the Constitution / Allocation of Business Rules for states, ministers, departments & the long tail |
 | **Current officeholders** | 108 / 370 | All officials & body heads | CJI, CEC, CAG, RBI/SEBI/IRDAI/TRAI/UPSC heads, all Governors & CMs (officeholders change frequently — structure is the focus) |
 | **Hindi names** | 370 / 370 | — | Complete |
@@ -402,4 +403,4 @@ MIT — see [LICENSE](LICENSE).
 
 ## Acknowledgments
 
-Inspired by [Machinery of Government UK](https://machineryofgovernment.co.uk) by Harry Rushworth. Built with [Cytoscape.js](https://js.cytoscape.org/).
+Inspired by [Machinery of Government UK](https://machineryofgovernment.uk) by Harry Rushworth. Built with [Cytoscape.js](https://js.cytoscape.org/).

@@ -469,7 +469,7 @@ function FullView({
         },
         {
           selector: 'node[subtype = "local-body"]',
-          style: { 'shape': 'diamond', 'border-color': '#0e6655' } as any,
+          style: { 'shape': 'triangle', 'border-color': '#0e6655' } as any,
         },
         // ── Group shapes ──
         {

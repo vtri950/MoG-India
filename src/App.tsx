@@ -190,6 +190,10 @@ function App() {
                     <svg width="16" height="16" viewBox="0 0 16 16"><polygon points="8,1 15,6 13,15 3,15 1,6" fill="#dc2626" stroke="#922b21" strokeWidth="1.5"/></svg>
                     <span>Groups</span>
                   </div>
+                  <div className="legend-item">
+                    <svg width="16" height="16" viewBox="0 0 16 16"><polygon points="8,2 15,14 1,14" fill="#0ea5e9" stroke="#0e6655" strokeWidth="1.5"/></svg>
+                    <span>Local Government</span>
+                  </div>
                 </div>
                 <div className="legend-separator" />
                 <div className="legend-items">
