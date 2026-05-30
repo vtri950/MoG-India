@@ -1,6 +1,9 @@
 /**
  * FullView Component
- * Displays all government elements in a concentric ring layout using Cytoscape.js
+ * Displays all government elements in a clear concentric-ring layout (Cytoscape.js).
+ * Each ring is a step further from the President — the centre of constitutional
+ * power. The map is static: nodes are placed and stay put; only hover/click
+ * highlighting and zoom/pan respond.
  */
 
 import cytoscape, { Core, NodeSingular } from 'cytoscape';
@@ -8,7 +11,7 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { getAllElements, getChildIds, getElementById } from '../data/elements';
 import { jurisdictionMatchesFilter } from '../data/jurisdictions';
 import { ElementCategory, ElementSubtype, JurisdictionType } from '../types';
-import { getBorderColor, getNodeShape, getSubtypeColor } from '../utils/colors';
+import { darken, getBorderColor, getNodeShape, getRingColor, getSubtypeColor, lighten } from '../utils/colors';
 import './FullView.css';
 
 interface FullViewProps {
@@ -74,7 +77,16 @@ function calculateRings(): Map<string, number> {
   return rings;
 }
 
-const NODE_SIZE = 22;
+const NODE_SIZE = 34;
+
+// Labels for the concentric ring guides (distance from the President)
+const RING_LABELS: Record<number, string> = {
+  1: 'PM · Vice President',
+  2: 'Cabinet Ministers',
+  3: 'Union Ministries',
+  4: 'Departments & Agencies',
+  5: 'Bodies · PSUs · Tribunals',
+};
 
 function FullView({
   selectedElementId,
@@ -88,6 +100,7 @@ function FullView({
 }: FullViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<Core | null>(null);
+  const ringLayerRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const tooltipActiveRef = useRef(false);
   const pinnedIdRef = useRef<string | null>(null);
@@ -102,7 +115,8 @@ function FullView({
 
     elements.forEach(el => {
       const ring = rings.get(el.id) || 5;
-      
+      const base = getSubtypeColor(el.subtype as ElementSubtype);
+
       nodes.push({
         data: {
           id: el.id,
@@ -111,7 +125,11 @@ function FullView({
           category: el.category,
           subtype: el.subtype,
           ring: ring,
-          color: getSubtypeColor(el.subtype as ElementSubtype),
+          color: base,
+          // Single space-separated stop string for a glossy "lit sphere":
+          // bright highlight → base → shaded rim. (Cytoscape needs one value,
+          // not multiple data() mappers, for gradient-stop-colors.)
+          gradStops: `${lighten(base, 0.62)} ${base} ${darken(base, 0.32)}`,
           borderColor: getBorderColor(el.subtype as ElementSubtype),
           nodeShape: getNodeShape(el.category as ElementCategory, el.subtype as ElementSubtype),
         },
@@ -146,6 +164,56 @@ function FullView({
 
     return [...nodes, ...edges];
   }, [rings]);
+
+  // Draw concentric ring guides as an SVG overlay that tracks pan/zoom
+  const drawRings = useCallback((cy: Core) => {
+    const svg = ringLayerRef.current;
+    if (!svg) return;
+
+    const pres = cy.getElementById('president');
+    if (!pres.length) return;
+
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const pan = cy.pan();
+    const zoom = cy.zoom();
+    const center = pres.position();
+    const cx = center.x * zoom + pan.x;
+    const cy0 = center.y * zoom + pan.y;
+
+    // Mean model-space radius of the nodes in each ring
+    const sums = new Map<number, { total: number; count: number }>();
+    cy.nodes().forEach((n: any) => {
+      const ring = n.data('ring') as number;
+      if (!ring) return;
+      const dx = n.position().x - center.x;
+      const dy = n.position().y - center.y;
+      const r = Math.sqrt(dx * dx + dy * dy);
+      const entry = sums.get(ring) ?? { total: 0, count: 0 };
+      entry.total += r;
+      entry.count += 1;
+      sums.set(ring, entry);
+    });
+
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    const ringKeys = Object.keys(RING_LABELS)
+      .map(Number)
+      .sort((a, b) => a - b)
+      .filter(r => (sums.get(r)?.count ?? 0) > 0);
+
+    ringKeys.forEach(ring => {
+      const entry = sums.get(ring)!;
+      const radius = (entry.total / entry.count) * zoom;
+      if (radius < 6) return;
+
+      const circle = document.createElementNS(SVG_NS, 'circle');
+      circle.setAttribute('cx', String(cx));
+      circle.setAttribute('cy', String(cy0));
+      circle.setAttribute('r', String(radius));
+      circle.setAttribute('class', 'ring-guide');
+      svg.appendChild(circle);
+    });
+  }, []);
 
   // Highlight node + ancestor chain + direct children
   const highlightNode = useCallback((cy: Core, hoveredId: string | null, _pinned: boolean) => {
@@ -232,36 +300,65 @@ function FullView({
         {
           selector: 'node',
           style: {
+            // Glossy "lit sphere": centred radial gradient from a bright highlight
+            // through the base colour to a shaded rim — reads as 3-D, not a flat dot.
             'background-color': 'data(color)',
+            'background-fill': 'radial-gradient',
+            'background-gradient-stop-colors': 'data(gradStops)',
+            'background-gradient-stop-positions': '0 60 100',
             'border-color': 'data(borderColor)',
-            'border-width': '1.5px',
-            'label': '',
+            'border-width': '1px',
+            'border-opacity': 0.55,
+            // Smoothly animate size/opacity/border changes (hover pop, entrance, pulse)
+            'transition-property': 'width height opacity border-width background-blacken',
+            'transition-duration': 180 as any,
+            'transition-timing-function': 'ease-out' as any,
+            'label': 'data(label)',
             'width': NODE_SIZE,
             'height': NODE_SIZE,
-            'font-size': '10px',
-            'min-zoomed-font-size': '10px',
-            'font-weight': 'bold',
-            'text-valign': 'center',
+            'font-size': '11px',
+            // Labels fade in only once zoomed in enough to read them — at the
+            // overview zoom the ring-guide labels carry orientation instead, so
+            // the canvas stays uncluttered. (Pixel threshold in rendered space.)
+            'min-zoomed-font-size': 9,
+            'font-weight': 600,
+            'text-valign': 'bottom',
             'text-halign': 'center',
-            'color': '#222',
+            'text-margin-y': 3,
+            'color': '#2a2a2a',
+            'text-outline-color': '#f7f7f5',
+            'text-outline-width': 2.5,
             'text-wrap': 'wrap',
-            'text-max-width': '80px',
-            'opacity': 0.85,
+            'text-max-width': '90px',
+            'opacity': 0.96,
             'z-index': 1,
           } as any,
         },
-        // ── Ring-based sizing ──
+        // President: always labelled, even at the overview zoom — it anchors the map
         {
           selector: 'node[ring = 0]',
-          style: { 'width': 42, 'height': 42 } as any,
+          style: { 'min-zoomed-font-size': 0, 'font-size': '15px', 'font-weight': 700 } as any,
         },
         {
           selector: 'node[ring = 1]',
-          style: { 'width': 32, 'height': 32 } as any,
+          style: { 'min-zoomed-font-size': 0, 'font-size': '13px', 'font-weight': 700 } as any,
+        },
+        // ── Ring-based sizing (larger toward the centre of power) ──
+        {
+          selector: 'node[ring = 0]',
+          style: { 'width': 72, 'height': 72 } as any,
+        },
+        {
+          selector: 'node[ring = 1]',
+          style: { 'width': 54, 'height': 54 } as any,
         },
         {
           selector: 'node[ring = 2]',
-          style: { 'width': 26, 'height': 26 } as any,
+          style: { 'width': 44, 'height': 44 } as any,
+        },
+        {
+          selector: 'node[ring = 3]',
+          style: { 'width': 38, 'height': 38 } as any,
         },
         // ── Official shapes ──
         {
@@ -410,12 +507,13 @@ function FullView({
         {
           selector: 'edge',
           style: {
-            'width': '1px',
-            'line-color': '#aaa',
-            'target-arrow-color': '#aaa',
+            'width': '1.2px',
+            'line-color': '#b8b8b2',
+            'target-arrow-color': '#b8b8b2',
             'target-arrow-shape': 'triangle',
+            'arrow-scale': 0.7,
             'curve-style': 'bezier',
-            'opacity': 0.3,
+            'opacity': 0.5,
           } as any,
         },
         {
@@ -423,7 +521,7 @@ function FullView({
           style: {
             'line-style': 'dashed',
             'line-dash-pattern': [4, 3],
-            'opacity': 0.18,
+            'opacity': 0.3,
           } as any,
         },
       ],
@@ -434,29 +532,38 @@ function FullView({
           return 10 - ring;
         },
         levelWidth: () => 1,
-        minNodeSpacing: 50,
+        minNodeSpacing: 22,
+        spacingFactor: 0.75,
         padding: 50,
       },
-      minZoom: 0.02,
-      maxZoom: 3,
+      minZoom: 0.05,
+      maxZoom: 4,
       wheelSensitivity: 0.3,
     });
 
-    // Centre on President initially
-    const presNode = cy.getElementById('president');
-    if (presNode.length) {
-      cy.center(presNode);
-      cy.zoom({ level: 0.35, position: presNode.position() });
-    }
+    // Frame the whole network as a balanced concentric burst, centred on the
+    // President. A small zoom bump makes the inner-ring labels readable on load.
+    cy.fit(undefined, 60);
+    cy.zoom(cy.zoom() * 1.15);
+    cy.center();
+
+    // Keep the ring guides locked to the graph as it pans/zooms
+    drawRings(cy);
+    cy.on('pan zoom resize render', () => drawRings(cy));
 
     // Hover: highlight ancestor chain + direct children
     cy.on('mouseover', 'node', (event: any) => {
-      const hid = event.target.id();
+      const node = event.target;
+      const hid = node.id();
       if (pinnedIdRef.current && pinnedIdRef.current !== hid) {
         highlightNode(cy, hid, false);
       } else if (!pinnedIdRef.current) {
         highlightNode(cy, hid, false);
       }
+      // "Pop" the hovered node — the base transition animates the growth smoothly
+      const d = node.width();
+      node.style({ 'width': d * 1.35, 'height': d * 1.35, 'border-width': '2px', 'border-opacity': 1 });
+      containerRef.current?.style.setProperty('cursor', 'pointer');
       if (tooltipRef.current) {
         const el = getElementById(hid);
         tooltipRef.current.textContent = el?.name ?? hid;
@@ -465,7 +572,10 @@ function FullView({
       tooltipActiveRef.current = true;
     });
 
-    cy.on('mouseout', 'node', () => {
+    cy.on('mouseout', 'node', (event: any) => {
+      // Release the hover "pop" back to the node's ring-defined size
+      event.target.removeStyle('width height border-width border-opacity');
+      containerRef.current?.style.removeProperty('cursor');
       // Restore to filter/pinned/clear state
       if (searchActiveRef.current) {
         // Will be re-applied by the search effect
@@ -501,7 +611,7 @@ function FullView({
     return () => {
       cy.destroy();
     };
-  }, [cyElements, onElementClick, onSelectElement, highlightNode]);
+  }, [cyElements, onElementClick, onSelectElement, highlightNode, drawRings]);
 
   // Selection tracking: apply fv-selected class + label
   useEffect(() => {
@@ -581,7 +691,30 @@ function FullView({
 
   return (
     <div className="full-view" onMouseMove={handleMouseMove}>
+      {/* Concentric ring guides — drawn beneath the graph, synced to pan/zoom */}
+      <svg ref={ringLayerRef} className="ring-layer" />
+
       <div ref={containerRef} className="cytoscape-container" />
+
+      {/* Ring key — orients the viewer: each ring is a step out from the President */}
+      <div className="ring-key">
+        <div className="ring-key-title">Distance from the President</div>
+        <ol className="ring-key-list">
+          {[
+            'President',
+            'PM · Vice President',
+            'Cabinet Ministers',
+            'Union Ministries',
+            'Departments & Agencies',
+            'Bodies · PSUs · Tribunals',
+          ].map((labelText, i) => (
+            <li key={i}>
+              <span className="ring-key-num" style={{ background: getRingColor(i) }}>{i}</span>
+              {labelText}
+            </li>
+          ))}
+        </ol>
+      </div>
 
       {/* Interactive hint */}
       <div className="full-view-hint">Hover to explore · Click to select · Scroll to zoom</div>

@@ -81,6 +81,22 @@ const UTS_WITH_LEGISLATURE: UTInfo[] = [
 ];
 
 // ============================================================================
+// Hindi names of states & UTs (Devanagari) — used to fill nameHindi on the
+// generated elements. Keyed by the two-letter code used in the info tables.
+// ============================================================================
+
+const STATE_NAME_HINDI: Record<string, string> = {
+  ap: 'आंध्र प्रदेश', ar: 'अरुणाचल प्रदेश', as: 'असम', br: 'बिहार',
+  cg: 'छत्तीसगढ़', ga: 'गोवा', gj: 'गुजरात', hr: 'हरियाणा',
+  hp: 'हिमाचल प्रदेश', jh: 'झारखंड', ka: 'कर्नाटक', kl: 'केरल',
+  mp: 'मध्य प्रदेश', mh: 'महाराष्ट्र', mn: 'मणिपुर', ml: 'मेघालय',
+  mz: 'मिज़ोरम', nl: 'नागालैंड', od: 'ओडिशा', pb: 'पंजाब',
+  rj: 'राजस्थान', sk: 'सिक्किम', tn: 'तमिलनाडु', ts: 'तेलंगाना',
+  tr: 'त्रिपुरा', up: 'उत्तर प्रदेश', uk: 'उत्तराखंड', wb: 'पश्चिम बंगाल',
+  dl: 'दिल्ली', py: 'पुदुचेरी', jk: 'जम्मू और कश्मीर',
+};
+
+// ============================================================================
 // Generator: produce GovElement[] for all states
 // ============================================================================
 
@@ -180,11 +196,13 @@ function generateStateElements(): GovElement[] {
   // ---------------------
   for (const s of STATES_INFO) {
     const jur = stateJurisdiction(s.name);
+    const hi = STATE_NAME_HINDI[s.code] ?? s.name;
 
     // Governor
     elems.push({
       id: `state-${s.code}-governor`,
       name: `Governor of ${s.name}`,
+      nameHindi: `${hi} के राज्यपाल`,
       category: 'official',
       subtype: 'governor',
       description: `The Governor of ${s.name} is appointed by the President and serves as the constitutional head of the state. The Governor acts on the aid and advice of the Council of Ministers headed by the Chief Minister.`,
@@ -202,6 +220,7 @@ function generateStateElements(): GovElement[] {
     elems.push({
       id: `state-${s.code}-cm`,
       name: `Chief Minister of ${s.name}`,
+      nameHindi: `${hi} के मुख्यमंत्री`,
       category: 'official',
       subtype: 'chief-minister',
       description: `The Chief Minister of ${s.name} is the head of the state government. The CM is the leader of the majority party or coalition in the state Vidhan Sabha and is appointed by the Governor.`,
@@ -219,6 +238,7 @@ function generateStateElements(): GovElement[] {
     elems.push({
       id: `state-${s.code}-legislature`,
       name: `${s.name} State Legislature`,
+      nameHindi: `${hi} राज्य विधानमंडल`,
       category: 'group',
       subtype: 'state-legislature',
       description: s.legislature === 'bicameral'
@@ -235,6 +255,7 @@ function generateStateElements(): GovElement[] {
     elems.push({
       id: `state-${s.code}-hc`,
       name: `${s.name} High Court`,
+      nameHindi: `${hi} उच्च न्यायालय`,
       category: 'body',
       subtype: 'constitutional-body',
       description: `The High Court of ${s.name} exercises judicial review and is the highest court of appeal within the state. Judges are appointed by the President in consultation with the CJI and the Governor.`,
@@ -250,6 +271,7 @@ function generateStateElements(): GovElement[] {
     elems.push({
       id: `state-${s.code}-psc`,
       name: `${s.name} Public Service Commission`,
+      nameHindi: `${hi} लोक सेवा आयोग`,
       category: 'body',
       subtype: 'constitutional-body',
       description: `The ${s.name} PSC conducts examinations for appointments to civil services and posts under the state government. It advises the Governor on matters relating to recruitment.`,
@@ -266,11 +288,14 @@ function generateStateElements(): GovElement[] {
   // ---------------------
   for (const ut of UTS_WITH_LEGISLATURE) {
     const jur: import('../types').Jurisdiction = { type: 'ut-with-legislature', name: ut.name };
+    const hi = STATE_NAME_HINDI[ut.code] ?? ut.name;
+    const lgTitleHi = ut.lgTitle === 'Lieutenant Governor' ? 'उपराज्यपाल' : 'प्रशासक';
 
     // Lt. Governor / Administrator
     elems.push({
       id: `ut-${ut.code}-lg`,
       name: `${ut.lgTitle} of ${ut.name}`,
+      nameHindi: `${hi} के ${lgTitleHi}`,
       category: 'official',
       subtype: 'governor',
       description: `The ${ut.lgTitle} of ${ut.name} is appointed by the President and represents the Union Government in the territory. ${ut.hasLegislature ? `${ut.name} has an elected legislature and a Chief Minister.` : ''}`,
@@ -289,6 +314,7 @@ function generateStateElements(): GovElement[] {
       elems.push({
         id: `ut-${ut.code}-cm`,
         name: `Chief Minister of ${ut.name}`,
+        nameHindi: `${hi} के मुख्यमंत्री`,
         category: 'official',
         subtype: 'chief-minister',
         description: `The Chief Minister of ${ut.name} is the head of the elected government of the Union Territory. The CM exercises executive power on subjects delegated to the UT government.`,
@@ -307,6 +333,7 @@ function generateStateElements(): GovElement[] {
     elems.push({
       id: `ut-${ut.code}-legislature`,
       name: `${ut.name} Legislative Assembly`,
+      nameHindi: `${hi} विधान सभा`,
       category: 'group',
       subtype: 'state-legislature',
       description: `The ${ut.name} Legislative Assembly is the unicameral legislature of the Union Territory.`,
