@@ -145,7 +145,7 @@ const SUBTYPE_SHAPES: Partial<Record<ElementSubtype, NodeShape>> = {
   'subordinate-office': 'roundrectangle',
   'field-office': 'roundrectangle',
   // Bodies
-  'local-body': 'diamond',
+  'local-body': 'triangle',
   'service-cadre': 'ellipse',
   // Groups
   'state-legislature': 'pentagon',

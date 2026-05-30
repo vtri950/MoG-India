@@ -257,7 +257,7 @@ src/
 | **Corporations** | 4 | 30+ | Selective |
 | **Tribunals** | 3 | ~20 | NGT, NCLT, CAT |
 | **State Governments** | 28 states + 3 UTs (Governor, CM, Legislature, HC, PSC each) | All 28 states + 8 UTs | Generated structure for every state & legislature UT |
-| **Local Government** | ~42 elements | Panchayat Raj + Urban bodies | Framework in place |
+| **Local Government** | Rural (Zila Parishad → Panchayat Samiti → Gram Panchayat) + Urban (Municipal Corporation → Municipality → Nagar Panchayat) | Named individual bodies | Three-tier rural & urban hierarchies, rooted under State Governments (a State subject); shown as triangles in the graph |
 | **Powers data** | All 370 elements (1,105 powers) | — | `powers.ts` — hand-written for officials, ministries & major bodies; templated from the Constitution / Allocation of Business Rules for states, ministers, departments & the long tail |
 | **Current officeholders** | 108 / 370 | All officials & body heads | CJI, CEC, CAG, RBI/SEBI/IRDAI/TRAI/UPSC heads, all Governors & CMs (officeholders change frequently — structure is the focus) |
 | **Hindi names** | 370 / 370 | — | Complete |
